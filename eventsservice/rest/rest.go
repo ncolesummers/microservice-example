@@ -1,4 +1,4 @@
-package microservice_example
+package rest
 
 import (
 	"github.com/gorilla/mux"
@@ -14,11 +14,3 @@ func ServeAPI(endpoint string) error {
 	eventsrouter.Methods("POST").Path("").HandlerFunc(handler.NewEventHandler)
 	return http.ListenAndServe(endpoint, r)
 }
-
-type eventServiceHandler struct{}
-
-func (eh *eventServiceHandler) findEventHandler(w http.ResponseWriter, r *http.Request) {}
-
-func (eh *eventServiceHandler) allEventHandler(w http.ResponseWriter, r *http.Request) {}
-
-func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Request) {}
