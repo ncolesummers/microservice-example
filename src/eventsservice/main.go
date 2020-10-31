@@ -18,6 +18,13 @@ func main() {
 	dbhandler, _ := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
 
 	// RESTful API start
-	log.Fatal(rest.ServeAPI(config.RestfulEndpoint, dbhandler))
+	httpErrChan, httptlsErrChan := rest.ServeAPI(config.RestfulEndpoint, config.RestfulTLSEndPint, dbhandler)
+	select {
+	case err := <-httpErrChan:
+		log.Fatal("HTTP Error: ", err)
+	case err := <-httptlsErrChan:
+		log.Fatal("HTTPS Error: ", err)
+
+	}
 }
 
