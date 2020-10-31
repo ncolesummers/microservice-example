@@ -20,8 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4eaefea6-dcef-4240-9e86-70863e585d84" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/lib/configuration/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/configuration/configuration.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/persistence/models.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/persistence/models.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eventsservice/rest/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/eventsservice/rest/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/eventsservice/rest/rest.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/eventsservice/rest/rest.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/persistence/dblayer/dblayer.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/persistence/dblayer/dblayer.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/persistence/mongolayer/mongolayer.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/persistence/mongolayer/mongolayer.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
