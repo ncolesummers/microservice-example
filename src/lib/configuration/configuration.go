@@ -3,7 +3,9 @@ package configuration
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ncolesummers/microservice-example/src/lib/persistence/dblayer"
 	"os"
+
 )
 
 var (
