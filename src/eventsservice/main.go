@@ -2,7 +2,6 @@ package eventsservice
 
 import (
 	"flag"
-	"fmt"
 	"github.com/ncolesummers/microservice-example/src/eventsservice/rest"
 	"github.com/ncolesummers/microservice-example/src/lib/configuration"
 	"github.com/ncolesummers/microservice-example/src/lib/persistence/dblayer"
@@ -14,8 +13,8 @@ func main() {
 	flag.Parse()
 	//extract configuration
 	config, _ := configuration.ExtractConfiguration(*confPath)
-	fmt.Println("Connecting to database")
-	dbhandler, _ := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
+	log.Println("Connecting to database")
+	dbhandler, err := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
 	if err != nil {
 		log.Fatal(err)
 	}
