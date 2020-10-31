@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func ServeAPI(endpoint string, tlsendpoint string, databaseHandler persistence.DatabaseHandler) (chan error, chan error) {
+func ServeAPI(endpoint, tlsendpoint string, databaseHandler persistence.DatabaseHandler) (chan error, chan error) {
 	handler := NewEventHandler(databaseHandler)
 	r := mux.NewRouter()
 	eventsrouter := r.PathPrefix("/events").Subrouter()
