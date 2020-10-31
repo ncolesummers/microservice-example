@@ -1,14 +1,14 @@
 package mongolayer
 
 import (
+	"github.com/ncolesummers/microservice-example/src/lib/persistence"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	persistence "persistence.go"
 )
 
 const (
-	DB = "myevents"
-	USERS = "users"
+	DB     = "myevents"
+	USERS  = "users"
 	EVENTS = "events"
 )
 
