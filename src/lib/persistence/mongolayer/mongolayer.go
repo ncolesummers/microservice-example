@@ -3,7 +3,7 @@ package mongolayer
 import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"../persistence.go"
+	persistence "persistence.go"
 )
 
 const (
@@ -35,6 +35,10 @@ func (mgoLayer *MongoDBLayer) AddEvent(e persistence.Event) ([]byte, error) {
 		e.Location.ID = bson.NewObjectId()
 	}
 	return []byte(e.ID), s.DB(DB).C(EVENTS).Insert(e)
+}
+
+func (mgoLayer *MongoDBLayer) FindEvent(id []byte) (persistence.Event, error) {
+
 }
 
 func (mgoLayer *MongoDBLayer) getFreshSession() *mgo.Session {

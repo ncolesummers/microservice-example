@@ -1,5 +1,7 @@
 package persistence
 
+import "gopkg.in/mgo.v2/bson"
+
 type Event struct {
 	ID bson.ObjectId `bson:"_id"`
 	Name string
