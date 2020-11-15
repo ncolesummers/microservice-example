@@ -2,9 +2,10 @@ package eventsservice
 
 import (
 	"flag"
-	"github.com/ncolesummers/microservice-example/src/eventsservice/rest"
-	"github.com/ncolesummers/microservice-example/src/lib/configuration"
-	"github.com/ncolesummers/microservice-example/src/lib/persistence/dblayer"
+	"github.com/streadway/amqp"
+	"github.com/ncolesummers/microservice-example/eventsservice/rest"
+	"github.com/ncolesummers/microservice-example/lib/configuration"
+	"github.com/ncolesummers/microservice-example/lib/persistence/dblayer"
 	"log"
 )
 

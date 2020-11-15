@@ -4,13 +4,14 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/ncolesummers/microservice-example/src/lib/persistence"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/mux"
+	"github.com/ncolesummers/microservice-example/lib/persistence"
 )
 
-type eventServiceHandler struct{
+type eventServiceHandler struct {
 	dbhandler persistence.DatabaseHandler
 }
 
