@@ -6,20 +6,22 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/ncolesummers/microservice-example/lib/msgqueue"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
-	"todo.com/myevents/lib/msgqueue"
+	"todo.com/myevents/contracts"
 )
 
 type eventServiceHandler struct {
-	dbhandler persistence.DatabaseHandler
+	dbhandler    persistence.DatabaseHandler
 	eventEmitter msgqueue.EventEmitter
 }
 
 func NewEventHandler(databasehandler persistence.DatabaseHandler, eventEmitter msgqueue.EventEmitter) *eventServiceHandler {
 	return &eventServiceHandler{
-		dbhandler: databasehandler,
+		dbhandler:    databasehandler,
 		eventEmitter: eventEmitter,
 	}
 }
@@ -88,11 +90,11 @@ func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Re
 	}
 
 	msg := contracts.EventCreatedEvent{
-		ID: hex.EncodeToString(id),
-		Name: event.Name,
-		LocationID: event.Location.ID,
-		Start: time.Unix(event.StartDate, 0),
-		End: time.Unix(event.EndDate, 0),
+		ID:         hex.EncodeToString(id),
+		Name:       event.Name,
+		LocationID: string(event.Location.ID),
+		Start:      time.Unix(event.StartDate, 0),
+		End:        time.Unix(event.EndDate, 0),
 	}
 	eh.eventEmitter(&msg)
 
