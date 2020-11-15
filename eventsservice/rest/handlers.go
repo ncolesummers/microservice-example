@@ -9,15 +9,18 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
+	"todo.com/myevents/lib/msgqueue"
 )
 
 type eventServiceHandler struct {
 	dbhandler persistence.DatabaseHandler
+	eventEmitter msgqueue.EventEmitter
 }
 
-func NewEventHandler(databasehandler persistence.DatabaseHandler) *eventServiceHandler {
+func NewEventHandler(databasehandler persistence.DatabaseHandler, eventEmitter msgqueue.EventEmitter) *eventServiceHandler {
 	return &eventServiceHandler{
 		dbhandler: databasehandler,
+		eventEmitter: eventEmitter,
 	}
 }
 
@@ -83,5 +86,14 @@ func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Re
 		fmt.Fprintf(w, "{error: Error occured while persisting event %d %s}", id, err)
 		return
 	}
-	fmt.Fprint(w, `{"id":%d}`, id)
+
+	msg := contracts.EventCreatedEvent{
+		ID: hex.EncodeToString(id),
+		Name: event.Name,
+		LocationID: event.Location.ID,
+		Start: time.Unix(event.StartDate, 0),
+		End: time.Unix(event.EndDate, 0),
+	}
+	eh.eventEmitter(&msg)
+
 }

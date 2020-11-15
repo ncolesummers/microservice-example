@@ -2,18 +2,30 @@ package eventsservice
 
 import (
 	"flag"
-	"github.com/streadway/amqp"
+	"log"
+
 	"github.com/ncolesummers/microservice-example/eventsservice/rest"
 	"github.com/ncolesummers/microservice-example/lib/configuration"
 	"github.com/ncolesummers/microservice-example/lib/persistence/dblayer"
-	"log"
+	"github.com/streadway/amqp"
+	"todo.com/myevents/lib/msgqueue/amqp"
 )
 
 func main() {
 	confPath := flag.String("conf", `.\configuration\config.json`, "flag to set the path to the configuration json file")
 	flag.Parse()
 	//extract configuration
-	config, _ := configuration.ExtractConfiguration(*confPath)
+	config := configuration.ExtractConfiguration(*confPath)
+	conn, err := amqp.Dial(config.AMQPMessageBroker)
+	if err != nil {
+		panic(err)
+	}
+
+	emitter, err := msqgqueue_amqp.NewAMQPEventEmitter(conn)
+	if err != nil {
+		panic(err)
+	}
+
 	log.Println("Connecting to database")
 	dbhandler, err := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
 	if err != nil {
@@ -29,4 +41,3 @@ func main() {
 		log.Fatal("HTTPS Error: ", err)
 	}
 }
-

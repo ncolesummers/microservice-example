@@ -1,7 +1,7 @@
 package mongolayer
 
 import (
-	"github.com/ncolesummers/microservice-example/src/lib/persistence"
+	"github.com/ncolesummers/microservice-example/lib/persistence"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -49,7 +49,7 @@ func (mgoLayer *MongoDBLayer) FindEventByName(name string) (persistence.Event, e
 	s := mgoLayer.getFreshSession()
 	defer s.Close()
 	e := persistence.Event{}
-	err := s.DB(DB).C(EVENTS).Find(bson.M{"name":name}).One(&e)
+	err := s.DB(DB).C(EVENTS).Find(bson.M{"name": name}).One(&e)
 	return e, err
 }
 
@@ -60,7 +60,6 @@ func (mgoLayer *MongoDBLayer) FindAllAvailableEvents() ([]persistence.Event, err
 	err := s.DB(DB).C(EVENTS).Find(nil).All(&events)
 	return events, err
 }
-
 
 func (mgoLayer *MongoDBLayer) getFreshSession() *mgo.Session {
 	return mgoLayer.session.Copy()

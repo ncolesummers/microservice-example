@@ -1,14 +1,14 @@
 package dblayer
 
 import (
-	"github.com/ncolesummers/microservice-example/src/lib/persistence"
-	"github.com/ncolesummers/microservice-example/src/lib/persistence/mongolayer"
+	"github.com/ncolesummers/microservice-example/lib/persistence"
+	"github.com/ncolesummers/microservice-example/lib/persistence/mongolayer"
 )
 
 type DBTYPE string
 
 const (
-	MONGODB DBTYPE = "mongodb"
+	MONGODB  DBTYPE = "mongodb"
 	DYNAMODB DBTYPE = "dynamodb"
 )
 
