@@ -1,16 +1,17 @@
 package listener
 
 import (
-	"todo.com/myevents/contracts"
 	"log"
+
 	"github.com/ncolesummers/microservice-example/lib/msgqueue"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
 	"gopkg.in/mgo.v2/bson"
+	"todo.com/myevents/contracts"
 )
 
 type EventProcessor struct {
 	EventListener msgqueue.EventListener
-	Database	persistence.DatabaseHandler
+	Database      persistence.DatabaseHandler
 }
 
 func (p *EventProcessor) ProcessEvents() error {
