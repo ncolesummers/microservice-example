@@ -11,7 +11,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/ncolesummers/microservice-example/lib/msgqueue"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
-	"todo.com/myevents/contracts"
+	"github.com/ncolesummers/microservice-example/lib/contracts"
 )
 
 type eventServiceHandler struct {
