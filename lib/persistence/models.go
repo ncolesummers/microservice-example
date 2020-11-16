@@ -20,7 +20,7 @@ func (u *User) String() string {
 
 type Event struct {
 	ID        bson.ObjectId `bson:"_id"`
-	Name      string
+	Name      string        `dynamodbav:"EventName"`
 	Duration  int
 	StartDate int64
 	EndDate   int64

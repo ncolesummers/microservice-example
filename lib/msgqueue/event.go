@@ -1,6 +1,6 @@
 package msgqueue
 
 type Event interface {
-	PartitionKey() string
+	// PartitionKey() string
 	EventName() string
 }
