@@ -8,13 +8,13 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"todo.com/myevents/contracts"
+	"github.com/ncolesummers/microservice-example/lib/contracts"
 	"github.com/ncolesummers/microservice-example/lib/msgqueue"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
 )
 
 type eventRef struct {
-	ID string `json:"id"`
+	ID   string `json:"id"`
 	Name string `json:"name,omitempty"`
 }
 
@@ -23,13 +23,13 @@ type createBookingRequest struct {
 }
 
 type createBookingResponse struct {
-	ID string `json:"id"`
+	ID    string   `json:"id"`
 	Event eventRef `json:"event"`
 }
 
 type CreateBookingHandler struct {
 	eventEmitter msgqueue.EventEmitter
-	database persistence.DatabaseHandler
+	database     persistence.DatabaseHandler
 }
 
 func (h *CreateBookingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +41,10 @@ func (h *CreateBookingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	eventIDMongo, _ hex.DecodeString(eventID)
+	eventIDMongo, err := hex.DecodeString(eventID)
+	if err != nil {
+		fmt.Println(err)
+	}
 	event, err := h.database.FindEvent(eventIDMongo)
 	if err != nil {
 		w.WriteHeader(404)
@@ -62,16 +65,19 @@ func (h *CreateBookingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		fmt.Fprintf(w, "seat number must be positive (was %d)", bookingRequest.Seats)
 	}
 
-	eventIDAsBytes, _ := event.ID.MarshalText()
+	eventIDAsBytes, err := event.ID.MarshalText()
+	if err != nil {
+		fmt.Println(err)
+	}
 	booking := persistence.Booking{
-		Date: time.Now().Unix(),
+		Date:    time.Now().Unix(),
 		EventID: eventIDAsBytes,
-		Seats: bookingRequest.Seats,
+		Seats:   bookingRequest.Seats,
 	}
 
 	msg := contracts.EventBookedEvent{
 		EventID: event.ID.Hex(),
-		UserID: "someUserID",
+		UserID:  "someUserID",
 	}
 	h.eventEmitter.Emit(&msg)
 

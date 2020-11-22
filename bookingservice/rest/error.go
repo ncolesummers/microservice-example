@@ -11,7 +11,7 @@ type errorResponse struct {
 
 func respondWithError(res http.ResponseWriter, msg string, code int) error {
 	response := errorResponse{msg}
-	jsonResponse, err := json.Marshal(&response)
+	_, err := json.Marshal(&response)
 	if err != nil {
 		return err
 	}

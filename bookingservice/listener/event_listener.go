@@ -3,10 +3,10 @@ package listener
 import (
 	"log"
 
+	"github.com/ncolesummers/microservice-example/lib/contracts"
 	"github.com/ncolesummers/microservice-example/lib/msgqueue"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
 	"gopkg.in/mgo.v2/bson"
-	"todo.com/myevents/contracts"
 )
 
 type EventProcessor struct {

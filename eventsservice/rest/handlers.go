@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/ncolesummers/microservice-example/lib/contracts"
 	"github.com/ncolesummers/microservice-example/lib/msgqueue"
 	"github.com/ncolesummers/microservice-example/lib/persistence"
-	"github.com/ncolesummers/microservice-example/lib/contracts"
 )
 
 type eventServiceHandler struct {
@@ -96,6 +96,11 @@ func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Re
 		Start:      time.Unix(event.StartDate, 0),
 		End:        time.Unix(event.EndDate, 0),
 	}
-	eh.eventEmitter(&msg)
+	eh.eventEmitter.Emit(&msg)
+
+	w.Header().Set("Content-Type", "application/json;charset=utf-8")
+
+	w.WriteHeader(201)
+	// json.NewEncoder(w).Encode(&persistedLocation)
 
 }

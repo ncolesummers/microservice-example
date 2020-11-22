@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	DB     = "myevents"
-	USERS  = "users"
-	EVENTS = "events"
+	DB        = "myevents"
+	USERS     = "users"
+	EVENTS    = "events"
+	LOCATIONS = "locations"
 )
 
 type MongoDBLayer struct {
