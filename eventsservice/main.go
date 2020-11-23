@@ -18,13 +18,13 @@ import (
 func main() {
 	var eventEmitter msgqueue.EventEmitter
 
-	confPath := flag.String("conf", `./configuration/config.json`, "flag to set the path to the configuration json file")
+	confPath := flag.String("conf", `.\configuration\config.json`, "flag to set the path to the configuration json file")
 	flag.Parse()
 	//extract configuration
-	config, err := configuration.ExtractConfiguration(*confPath)
-	if err != nil {
-		panic(err)
-	}
+	config, _ := configuration.ExtractConfiguration(*confPath)
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	log.Println("Connecting to Message Broker...")
 	// log.Println(config.MessageBrokerType)
@@ -55,18 +55,14 @@ func main() {
 	}
 
 	log.Println("Connecting to database")
-	dbhandler, err := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Database connection successful... ")
+	dbhandler, _ := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
 
+	log.Println("Database connection successful... ")
 	log.Println("Serving API...")
-	httpErrChan, httptlsErrChan := rest.ServeAPI(config.RestfulEndpoint, config.RestfulTLSEndPoint, dbhandler, eventEmitter)
-	select {
-	case err := <-httpErrChan:
-		log.Fatal("HTTP Error: ", err)
-	case err := <-httptlsErrChan:
-		log.Fatal("HTTPS Error: ", err)
+
+	err := rest.ServeAPI(config.RestfulEndpoint, dbhandler, eventEmitter)
+	if err != nil {
+		panic(err)
 	}
+
 }

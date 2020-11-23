@@ -52,6 +52,7 @@ func (eh *eventServiceHandler) findEventHandler(w http.ResponseWriter, r *http.R
 		}
 	}
 	if err != nil {
+		w.WriteHeader(404)
 		fmt.Fprintf(w, `{"error": "%s"}`, err)
 		return
 	}
@@ -72,6 +73,27 @@ func (eh *eventServiceHandler) allEventHandler(w http.ResponseWriter, r *http.Re
 		w.WriteHeader(500)
 		fmt.Fprintf(w, "{error: Error occured while trying encode events to JSON %s}", err)
 	}
+}
+
+func (eh *eventServiceHandler) oneEventHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	eventID, ok := vars["eventID"]
+	if !ok {
+		w.WriteHeader(400)
+		fmt.Fprint(w, "missing route parameter 'eventID'")
+		return
+	}
+
+	eventIDBytes, _ := hex.DecodeString(eventID)
+	event, err := eh.dbhandler.FindEvent(eventIDBytes)
+	if err != nil {
+		w.WriteHeader(404)
+		fmt.Fprintf(w, "event with id %s was not found", eventID)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf8")
+	json.NewEncoder(w).Encode(&event)
 }
 
 func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Request) {
@@ -101,6 +123,48 @@ func (eh *eventServiceHandler) newEventHandler(w http.ResponseWriter, r *http.Re
 	w.Header().Set("Content-Type", "application/json;charset=utf-8")
 
 	w.WriteHeader(201)
-	// json.NewEncoder(w).Encode(&persistedLocation)
+	json.NewEncoder(w).Encode(&event)
 
+}
+
+func (eh *eventServiceHandler) allLocationsHandler(w http.ResponseWriter, r *http.Request) {
+	locations, err := eh.dbhandler.FindAllLocations()
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "could not load locations %s", err)
+		return
+	}
+
+	json.NewEncoder(w).Encode(locations)
+}
+
+func (eh *eventServiceHandler) newLocationHandler(w http.ResponseWriter, r *http.Request) {
+	location := persistence.Location{}
+	err := json.NewDecoder(r.Body).Decode(&location)
+	if err != nil {
+		w.WriteHeader(400)
+		fmt.Fprintf(w, "request body could not be unserialized to location: %s:", err)
+		return
+	}
+
+	persistedLocation, err := eh.dbhandler.AddLocation(location)
+	if err != nil {
+		w.WriteHeader(500)
+		fmt.Fprintf(w, "could not persist location: %s", err)
+	}
+
+	msg := contracts.LocationCreatedEvent{
+		ID:      string(persistedLocation.ID),
+		Name:    persistedLocation.Name,
+		Address: persistedLocation.Address,
+		Country: persistedLocation.Country,
+		Halls:   persistedLocation.Halls,
+	}
+
+	eh.eventEmitter.Emit(&msg)
+
+	w.Header().Set("Content-Type", "application/json;charset=utf8")
+
+	w.WriteHeader(201)
+	json.NewEncoder(w).Encode(&persistedLocation)
 }
