@@ -13,7 +13,8 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-
+# My keys
+*.pem
 # Workspace Files
 *.code-workspace
 *.idea
