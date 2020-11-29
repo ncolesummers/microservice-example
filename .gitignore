@@ -4,7 +4,8 @@
 *.dll
 *.so
 *.dylib
-
+eventsservice/eventsservice
+bookingservice/bookingservice
 # Test binary, built with `go test -c`
 *.test
 
