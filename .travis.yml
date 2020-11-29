@@ -1,0 +1,10 @@
+language: go
+go:
+  - 1.15
+env:
+  - CGO_ENABLED=0
+
+install: 
+  - go mod download
+script:
+  - go build
