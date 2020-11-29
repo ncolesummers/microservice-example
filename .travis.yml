@@ -8,8 +8,8 @@ env:
   global:
     - CGO_ENABLED=0
   matrix:
-    - SERVICE=eventsservice
-    - SERVICE=bookingservice
+    - SERVICE=/eventsservice
+    - SERVICE=/bookingservice
 install: 
   - go mod download
 script:
