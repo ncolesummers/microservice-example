@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/Shopify/sarama"
 	"github.com/ncolesummers/microservice-example/bookingservice/listener"
@@ -12,6 +14,7 @@ import (
 	msgqueue_amqp "github.com/ncolesummers/microservice-example/lib/msgqueue/amqp"
 	"github.com/ncolesummers/microservice-example/lib/msgqueue/kafka"
 	"github.com/ncolesummers/microservice-example/lib/persistence/dblayer"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/streadway/amqp"
 )
 
@@ -62,6 +65,15 @@ func main() {
 
 	processor := listener.EventProcessor{eventListener, dbhandler}
 	go processor.ProcessEvents()
+
+	go func() {
+		log.Println("Serving metrics API")
+
+		h := http.NewServeMux()
+		h.Handle("/metrics", promhttp.Handler())
+
+		http.ListenAndServe(":9100", h)
+	}()
 
 	rest.ServeAPI(config.RestfulEndpoint, dbhandler, eventEmitter)
 }

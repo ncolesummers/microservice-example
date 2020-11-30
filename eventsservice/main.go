@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+	"net/http"
 
 	"github.com/Shopify/sarama"
 
@@ -12,6 +13,7 @@ import (
 	msqgqueue_amqp "github.com/ncolesummers/microservice-example/lib/msgqueue/amqp"
 	"github.com/ncolesummers/microservice-example/lib/msgqueue/kafka"
 	"github.com/ncolesummers/microservice-example/lib/persistence/dblayer"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/streadway/amqp"
 )
 
@@ -58,6 +60,16 @@ func main() {
 	dbhandler, _ := dblayer.NewPersistenceLayer(config.Databasetype, config.DBConnection)
 
 	log.Println("Database connection successful... ")
+
+	go func() {
+		log.Println("Serving metrics API")
+
+		h := http.NewServeMux()
+		h.Handle("/metrics", promhttp.Handler())
+
+		http.ListenAndServe(":9100", h)
+	}()
+
 	log.Println("Serving API...")
 
 	err := rest.ServeAPI(config.RestfulEndpoint, dbhandler, eventEmitter)
