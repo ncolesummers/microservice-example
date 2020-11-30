@@ -74,6 +74,6 @@ func main() {
 
 		http.ListenAndServe(":9100", h)
 	}()
-
+	log.Println("Serving Booking API")
 	rest.ServeAPI(config.RestfulEndpoint, dbhandler, eventEmitter)
 }

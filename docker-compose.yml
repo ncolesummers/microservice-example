@@ -6,6 +6,7 @@ networks:
 
 volumes:
   prometheus-data:
+  grafana-data:
 
 services:
 
@@ -21,8 +22,8 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
-      - "prometheus-data:/prometheus"
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
     networks:
       - myevents
       - monitoring
@@ -33,6 +34,8 @@ services:
       - 3000:3000
     networks:
       - monitoring
+    volumes:
+      - grafana-data:/var/lib/grafana
 
   events-db:
     image: mongo
@@ -54,6 +57,9 @@ services:
     environment:
       - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
       - MONGO_URL=mongodb://events-db/events
+    depends_on:
+      - rabbitmq
+      - events-db
   
   bookings:
     build: ./bookingservice/
@@ -65,6 +71,9 @@ services:
     environment:
       - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
       - MONGO_URL=mongodb://bookings-db/bookings
+    depends_on:
+      - rabbitmq
+      - events-db
 
   frontend: 
       build: ./frontend/microservice-example-frontend/
