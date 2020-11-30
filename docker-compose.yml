@@ -1,6 +1,11 @@
 version: "3"
+
 networks:
   myevents:
+  monitoring:
+
+volumes:
+  prometheus-data:
 
 services:
 
@@ -65,3 +70,4 @@ services:
       build: ./frontend/microservice-example-frontend/
       ports:
         - "80:80"
+
