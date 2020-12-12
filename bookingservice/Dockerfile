@@ -1,4 +1,4 @@
-FROM scratch
+FROM byrnedo/alpine-curl
 
 COPY bookingservice /bookingservice
 

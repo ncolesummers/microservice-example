@@ -1,8 +1,8 @@
 version: "3"
 
-networks:
-  myevents:
-  monitoring:
+# networks:
+  # myevents:
+  # monitoring:
 
 volumes:
   prometheus-data:
@@ -14,46 +14,48 @@ services:
     image: rabbitmq:3-management
     ports:
       - 5672:5672
-    networks:
-      - myevents
+    # networks:
+    #   - myevents
 
   prometheus:
     image: prom/prometheus:v1.6.1
+    # image: prom/prometheus:latest
     ports:
       - 9090:9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
-    networks:
-      - myevents
-      - monitoring
+    # networks:
+    #   - myevents
+    #   - monitoring
 
   grafana:
     image: grafana/grafana:4.2.0
+    # image: grafana/grafana:latest
     ports:
       - 3000:3000
-    networks:
-      - monitoring
+    # networks:
+    #   - monitoring
     volumes:
       - grafana-data:/var/lib/grafana
 
   events-db:
     image: mongo
-    networks:
-      - myevents
+    # networks:
+    #   - myevents
 
   bookings-db:
     image: mongo
-    networks:
-    - myevents
+    # networks:
+    # - myevents
 
   events:
     build: ./eventsservice/
     ports:
       - "8181:8181"
       - "9100:9100"
-    networks:
-      - myevents
+    # networks:
+    #   - myevents
     environment:
       - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
       - MONGO_URL=mongodb://events-db/events
@@ -62,12 +64,14 @@ services:
       - events-db
   
   bookings:
-    build: ./bookingservice/
+    build: 
+      context: ./bookingservice/
+      dockerfile: Dockerfile
     ports:
       - "8282:8181"
       - "9101:9100"
-    networks:
-      - myevents
+    # networks:
+    #   - myevents
     environment:
       - AMQP_BROKER_URL=amqp://guest:guest@rabbitmq:5672/
       - MONGO_URL=mongodb://bookings-db/bookings

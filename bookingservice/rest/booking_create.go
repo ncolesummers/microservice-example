@@ -81,6 +81,12 @@ func (h *CreateBookingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 	}
 	h.eventEmitter.Emit(&msg)
 
+	bookingCount.
+		WithLabelValues(eventID, event.Name).
+		Add(float64(bookingRequest.Seats))
+	seatsPerBooking.
+		Observe(float64(bookingRequest.Seats))
+
 	h.database.AddBookingForUser([]byte("someUserID"), booking)
 
 	w.Header().Set("Content-Type", "application/json")
