@@ -50,7 +50,7 @@ func NewEventListenerFromEnvironment() (msgqueue.EventListener, error) {
 			return nil, err
 		}
 	} else {
-		return nil, errors.New("Neither AMQP_URL nor KAFKA_BROKERS specified")
+		return nil, errors.New("No broker specified")
 	}
 
 	return listener, nil
